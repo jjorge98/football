@@ -1,0 +1,59 @@
+#money {
+    width: 85px;
+    height: 35px;
+    border-width: 2px;
+    border-color: black;
+    border-radius: 5px;
+    border-style: solid;
+    vertical-align: middle;
+    color: black;
+}
+
+.square {
+    width: 800px;
+    height: 350px;
+    border-width: 1px;
+    border-color: black;
+    border-style: solid;
+    border-radius: 5px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.input-field[type=text] {
+    border: 2px solid;
+    border-radius: 4px;
+}
+
+.square2 {
+    width: 550px;
+    height: 375px;
+    border-width: 3px;
+    border-style: solid;
+    border-radius: 7px;
+    display: inline-block;
+    vertical-align: middle;
+    color: white;
+}
+
+#card1 {
+    width: 30%;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.square4 {
+    width: 600px;
+    height: 220px;
+    border-width: 2px;
+    border-color: black;
+    border-style: solid;
+    border-radius: 4px;
+    display: inline-block;
+    vertical-align: middle;
+    color: black;
+}
+
+label {
+    font-size: 16px;
+}
