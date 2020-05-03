@@ -25,6 +25,9 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/payment', 'UserController@payment')->name('payment');
         Route::post('/savePayment', 'UserController@savePayment')->name('savePayment');
         Route::post('/yearPayment', 'UserController@yearPayment')->name('yearPayment');
+        Route::post('/deleteUser', 'UserController@deleteUser')->name('deleteUser');
+        Route::get('/editStudent', 'UserController@editStudent')->name('editStudent');
+        Route::post('/saveStudentData', 'UserController@saveStudentData')->name('saveStudentData');
     });
 });
 

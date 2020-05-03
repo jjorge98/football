@@ -69,6 +69,7 @@ $(document).ready(function () {
 				return obj;
 			}, {});
 
+		swal.showLoading();
 		$.ajax({
 			url: "/studentForm",
 			headers: {
@@ -122,6 +123,12 @@ $(document).ready(function () {
 		"columnDefs": [
 			{ "width": "500px", "targets": 0 }
 		],
+		language: {
+			url: "https://cdn.datatables.net/plug-ins/1.10.16/i18n/Portuguese-Brasil.json"
+		},
+	});
+
+	$('#studentsTable').DataTable({
 		language: {
 			url: "https://cdn.datatables.net/plug-ins/1.10.16/i18n/Portuguese-Brasil.json"
 		},
@@ -253,7 +260,63 @@ $(document).ready(function () {
 				return false;
 			}
 		});
-	})
+	});
+
+	$("#editStudentButton").click(function (event) {
+		event.preventDefault()
+
+		var data = $("#editStudent")
+			.serializeArray()
+			.reduce(function (obj, item) {
+				obj[item.name] = item.value;
+				return obj;
+			}, {});
+
+		swal.showLoading();
+		$.ajax({
+			url: "/user/saveStudentData",
+			headers: {
+				"X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
+			},
+			data: {
+				data
+			},
+			type: "POST",
+			dataType: "json",
+
+			success: function (data) {
+				if (data.result == "OK") {
+					swal.fire({
+						icon: "success",
+						title: "Dados salvos com sucesso!",
+						allowOutsideClick: true
+					}).then(() => {
+						window.location.reload();
+					});
+				} else {
+					swal.fire({
+						icon: "warning",
+						title: "Erro",
+						text: data.title,
+						allowOutsideClick: true
+					});
+					console.log(data.error);
+					return false;
+				}
+			},
+			error: function (data) {
+
+				swal.fire({
+					icon: "warning",
+					title: "Erro",
+					text: "Ocorreu um erro. Por favor, contate o adm do sistema!",
+					allowOutsideClick: true
+				});
+				console.log(data.error);
+				return false;
+			}
+		});
+	});
 });
 
 /* Funções para validar CEP */
@@ -330,6 +393,7 @@ function meu_callback(conteudo) {
 /* Fim funções para validar CEP */
 
 function showInfo(id) {
+	swal.showLoading();
 	$.ajax({
 		url: "/user/studentInfo",
 		headers: {
@@ -374,6 +438,7 @@ function showInfo(id) {
 }
 
 function showInfoParent(id) {
+	swal.showLoading();
 	$.ajax({
 		url: "/user/parentInfo",
 		headers: {
@@ -415,6 +480,7 @@ function showInfoParent(id) {
 }
 
 function showInfoAddress(id) {
+	swal.showLoading();
 	$.ajax({
 		url: "/user/addressInfo",
 		headers: {
@@ -441,6 +507,53 @@ function showInfoAddress(id) {
 					,
 					allowOutsideClick: true
 				})
+			}
+		},
+		error: function (data) {
+
+			swal.fire({
+				icon: "warning",
+				title: "Erro",
+				text: "Ocorreu um erro. Por favor, contate o adm do sistema!",
+				allowOutsideClick: true
+			});
+			console.log(data);
+			return false;
+		}
+	});
+}
+
+function deleteUser(id) {
+	swal.showLoading();
+	$.ajax({
+		url: "/user/deleteUser",
+		headers: {
+			"X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
+		},
+		data: {
+			id
+		},
+		type: "POST",
+		dataType: "json",
+
+		success: function (data) {
+			if (data.result == "OK") {
+				swal.fire({
+					icon: "success",
+					title: "Aluno excluído com sucesso",
+					allowOutsideClick: true
+				}).then(() => {
+					window.location.reload();
+				})
+			} else{
+				swal.fire({
+					icon: "warning",
+					title: data.title,
+					text: data.text,
+					allowOutsideClick: true
+				});
+				console.log(data.error);
+				return false;				
 			}
 		},
 		error: function (data) {

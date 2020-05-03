@@ -34,9 +34,17 @@ class StudentController extends Controller
             if (DB::table('aluno')->where('cpfAluno', $CPF)->exists()) {
                 $data['result'] = 'ERROR';
                 $data['title'] = 'CPF do aluno já cadastrado!';
-                $data['text'] = 'O CPF deste aluno já está cadastrado no sistema. Caso queira, entre em contato com a equipe para verificar o processo!';
-            } else {
+                $data['text'] = 'O CPF deste aluno já está cadastrado no sistema. Caso tenha sido excluído
+                 e esteja regressando, seu cadastro foi refeito. Caso queira, entre em contato com a equipe
+                  para verificar o processo!';
 
+                DB::table('aluno')
+                    ->where('cpfAluno', $CPF)
+                    ->update([
+                        'deleted_at' => null
+                    ]);
+            } else {
+                dd("FDADK");
                 try {
                     $CPFRESP = preg_replace('/\D/', '', $dados['studentCPF']);
 
@@ -44,7 +52,7 @@ class StudentController extends Controller
                         $idResponsavel = DB::table('responsavel')->select('idResponsavel')->where('cpfResp', $CPFRESP)->first()->idResponsavel;
                     } else {
                         $cidade = strtoupper(str_replace($a, $b, $dados['parentCity']));
-                        
+
                         if (DB::table('cidade')->where('nomeCidade', $cidade)->exists()) {
                             $idCidade = DB::table('cidade')->select('idCidade')->where('nomeCidade', $cidade)->first()->idCidade;
                         } else {
