@@ -81,12 +81,14 @@ $(document).ready(function () {
 			dataType: "json",
 
 			success: function (data) {
-				if (data.resultado == "OK") {
+				if (data.result == "OK") {
 					swal.fire({
 						icon: "success",
 						title: "Dados salvos com sucesso!",
 						allowOutsideClick: true
-					})
+					}).then(() => {
+						window.location.reload();
+					});
 				} else {
 					swal.fire({
 						icon: "warning",
@@ -103,10 +105,10 @@ $(document).ready(function () {
 				swal.fire({
 					icon: "warning",
 					title: "Erro",
-					text: data.title,
+					text: "Ocorreu um erro. Por favor, contate o adm do sistema!",
 					allowOutsideClick: true
 				});
-				console.log(data.error);
+				console.log(data);
 				return false;
 			}
 		});
@@ -116,7 +118,142 @@ $(document).ready(function () {
 		pesquisacep($(this).val())
 	});
 
-	$('#mytable').DataTable();
+	$('#paymentTable').DataTable({
+		"columnDefs": [
+			{ "width": "500px", "targets": 0 }
+		],
+		language: {
+			url: "https://cdn.datatables.net/plug-ins/1.10.16/i18n/Portuguese-Brasil.json"
+		},
+	});
+
+	$("#showYearPayment").click(function (event) {
+		event.preventDefault();
+		var year = $("#yearPayment").val();
+
+		$.ajax({
+			url: "/user/yearPayment",
+			headers: {
+				"X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
+			},
+			data: {
+				year
+			},
+			type: "POST",
+			dataType: "json",
+
+			success: function (data) {
+				if (data.result == "OK") {
+					if (typeof $('tbody').html() != 'undefined') {
+						$('tbody').children().remove();
+						var table = $('#paymentTable').DataTable();
+						table.clear();
+						table.destroy();
+					};
+
+					var toAppend = '';
+
+					data.students.forEach(element => {
+						var name = element.name.split(' ')
+
+						toAppend += '<tr id="' + element.id + '">' +
+							'<td class="center-align">' + name[0] + ' ' + name[name.length - 1] + '</td>';
+
+						if (element.months.indexOf('Jan') != -1) {
+							toAppend += '<td class="center-align"><i style="color: green" class="material-icons">check</i></td>';
+						} else {
+							toAppend += '<td class="center-align"><i style="color: red" class="material-icons">clear</i></td>'
+						}
+
+						if (element.months.indexOf('Fev') != -1) {
+							toAppend += '<td class="center-align"><i style="color: green" class="material-icons">check</i></td>';
+						} else {
+							toAppend += '<td class="center-align"><i style="color: red" class="material-icons">clear</i></td>'
+						}
+
+						if (element.months.indexOf('Mar') != -1) {
+							toAppend += '<td class="center-align"><i style="color: green" class="material-icons">check</i></td>';
+						} else {
+							toAppend += '<td class="center-align"><i style="color: red" class="material-icons">clear</i></td>'
+						}
+
+						if (element.months.indexOf('Abr') != -1) {
+							toAppend += '<td class="center-align"><i style="color: green" class="material-icons">check</i></td>';
+						} else {
+							toAppend += '<td class="center-align"><i style="color: red" class="material-icons">clear</i></td>'
+						}
+
+						if (element.months.indexOf('Mai') != -1) {
+							toAppend += '<td class="center-align"><i style="color: green" class="material-icons">check</i></td>';
+						} else {
+							toAppend += '<td class="center-align"><i style="color: red" class="material-icons">clear</i></td>'
+						}
+
+						if (element.months.indexOf('Jun') != -1) {
+							toAppend += '<td class="center-align"><i style="color: green" class="material-icons">check</i></td>';
+						} else {
+							toAppend += '<td class="center-align"><i style="color: red" class="material-icons">clear</i></td>'
+						}
+
+						if (element.months.indexOf('Jul') != -1) {
+							toAppend += '<td class="center-align"><i style="color: green" class="material-icons">check</i></td>';
+						} else {
+							toAppend += '<td class="center-align"><i style="color: red" class="material-icons">clear</i></td>'
+						}
+
+						if (element.months.indexOf('Ago') != -1) {
+							toAppend += '<td class="center-align"><i style="color: green" class="material-icons">check</i></td>';
+						} else {
+							toAppend += '<td class="center-align"><i style="color: red" class="material-icons">clear</i></td>'
+						}
+
+						if (element.months.indexOf('Set') != -1) {
+							toAppend += '<td class="center-align"><i style="color: green" class="material-icons">check</i></td>';
+						} else {
+							toAppend += '<td class="center-align"><i style="color: red" class="material-icons">clear</i></td>'
+						}
+
+						if (element.months.indexOf('Out') != -1) {
+							toAppend += '<td class="center-align"><i style="color: green" class="material-icons">check</i></td>';
+						} else {
+							toAppend += '<td class="center-align"><i style="color: red" class="material-icons">clear</i></td>'
+						}
+
+						if (element.months.indexOf('Nov') != -1) {
+							toAppend += '<td class="center-align"><i style="color: green" class="material-icons">check</i></td>';
+						} else {
+							toAppend += '<td class="center-align"><i style="color: red" class="material-icons">clear</i></td>'
+						}
+
+						if (element.months.indexOf('Dez') != -1) {
+							toAppend += '<td class="center-align"><i style="color: green" class="material-icons">check</i></td>';
+						} else {
+							toAppend += '<td class="center-align"><i style="color: red" class="material-icons">clear</i></td></tr>'
+						}
+					});
+					$('tbody').append(toAppend);
+				}
+				$('#paymentTable').DataTable({
+					"columnDefs": [
+						{ "width": "500px", "targets": 0 }
+					],
+					language: {
+						url: "https://cdn.datatables.net/plug-ins/1.10.16/i18n/Portuguese-Brasil.json"
+					},
+				});
+			},
+			error: function (data) {
+				swal.fire({
+					icon: "warning",
+					title: "Erro",
+					text: "Ocorreu um erro. Por favor, contate o adm do sistema!",
+					allowOutsideClick: true
+				});
+				console.log(data);
+				return false;
+			}
+		});
+	})
 });
 
 /* Funções para validar CEP */
@@ -192,6 +329,130 @@ function meu_callback(conteudo) {
 /* Fim função callback */
 /* Fim funções para validar CEP */
 
-function showInfo(students) {
-	console.log(students);
+function showInfo(id) {
+	$.ajax({
+		url: "/user/studentInfo",
+		headers: {
+			"X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
+		},
+		data: {
+			id
+		},
+		type: "POST",
+		dataType: "json",
+
+		success: function (data) {
+			if (data.result == "OK") {
+				swal.fire({
+					title: "Dados do aluno:",
+					html: '<div style="height: 3px; background-color:#2c3a59;margin-bottom:30px;" class="divider"></div>' +
+						'<h5>CPF: ' + data.student.cpfAluno + '</h5>' +
+						'<h5>RG: ' + data.student.rgAluno + '</h5>' +
+						'<h5>Data de nascimento: ' + data.student.dataNascimentoAluno + '</h5>' +
+						'<h5>Telefone: ' + data.student.telefoneAluno + '</h5>' +
+						'<h5>Escola: ' + data.student.escola + '</h5>' +
+						'<h5>Sala: ' + data.student.sala + '</h5>' +
+						'<h5>Turno: ' + data.student.turno + '</h5>'
+
+					,
+					allowOutsideClick: true
+				})
+			}
+		},
+		error: function (data) {
+
+			swal.fire({
+				icon: "warning",
+				title: "Erro",
+				text: "Ocorreu um erro. Por favor, contate o adm do sistema!",
+				allowOutsideClick: true
+			});
+			console.log(data);
+			return false;
+		}
+	});
+}
+
+function showInfoParent(id) {
+	$.ajax({
+		url: "/user/parentInfo",
+		headers: {
+			"X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
+		},
+		data: {
+			id
+		},
+		type: "POST",
+		dataType: "json",
+
+		success: function (data) {
+			if (data.result == "OK") {
+				swal.fire({
+					title: "Dados do responsável:",
+					html: '<div style="height: 3px; background-color:#2c3a59;margin-bottom:30px;" class="divider"></div>' +
+						'<h5>Nome: ' + data.parent.nomeResp + '</h5>' +
+						'<h5>CPF: ' + data.parent.cpfResp + '</h5>' +
+						'<h5>RG: ' + data.parent.rgResp + '</h5>' +
+						'<h5>Data de nascimento: ' + data.parent.dataNascimentoResp + '</h5>' +
+						'<h5>Telefone: ' + data.parent.telefoneResp + '</h5>'
+					,
+					allowOutsideClick: true
+				})
+			}
+		},
+		error: function (data) {
+
+			swal.fire({
+				icon: "warning",
+				title: "Erro",
+				text: "Ocorreu um erro. Por favor, contate o adm do sistema!",
+				allowOutsideClick: true
+			});
+			console.log(data);
+			return false;
+		}
+	});
+}
+
+function showInfoAddress(id) {
+	$.ajax({
+		url: "/user/addressInfo",
+		headers: {
+			"X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
+		},
+		data: {
+			id
+		},
+		type: "POST",
+		dataType: "json",
+
+		success: function (data) {
+			if (data.result == "OK") {
+				swal.fire({
+					title: "Endereço do aluno:",
+					html: '<div style="height: 3px; background-color:#2c3a59;margin-bottom:30px;" class="divider"></div>' +
+						'<h5>Endereço: ' + data.address.logradouro + '</h5>' +
+						'<h5>Número: ' + data.address.numero + '</h5>' +
+						'<h5>Complemento: ' + data.address.complemento + '</h5>' +
+						'<h5>Cidade: ' + data.address.nomeCidade + '</h5>' +
+						'<h5>Bairro: ' + data.address.bairro + '</h5>' +
+						'<h5>CEP: ' + data.address.cep + '</h5>' +
+						'<h5>Estado: ' + data.address.nomeEstado + '</h5>'
+					,
+					allowOutsideClick: true
+				})
+			}
+		},
+		error: function (data) {
+
+			swal.fire({
+				icon: "warning",
+				title: "Erro",
+				text: "Ocorreu um erro. Por favor, contate o adm do sistema!",
+				allowOutsideClick: true
+			});
+			console.log(data);
+			return false;
+		}
+	});
 }

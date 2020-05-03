@@ -18,6 +18,13 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/home', 'UserController@index')->name('homeUser');
         Route::get('/register', 'UserController@register')->name('studentRegister');
         Route::get('/studentList', 'UserController@studentList')->name('studentList');
+        Route::post('/studentInfo', 'UserController@studentInfo');
+        Route::post('/parentInfo', 'UserController@parentInfo');
+        Route::post('/addressInfo', 'UserController@addressInfo');
+        Route::get('/paymentRegister', 'UserController@paymentRegister')->name('paymentRegister');
+        Route::get('/payment', 'UserController@payment')->name('payment');
+        Route::post('/savePayment', 'UserController@savePayment')->name('savePayment');
+        Route::post('/yearPayment', 'UserController@yearPayment')->name('yearPayment');
     });
 });
 

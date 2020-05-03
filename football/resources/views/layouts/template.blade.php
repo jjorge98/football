@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="loading" lang="en" data-textdirection="ltr">
+<html class="loading" lang="pt-BR" data-textdirection="ltr">
 <!-- BEGIN: Head-->
 
 <head>
@@ -68,8 +68,13 @@
                                     class="material-icons">radio_button_unchecked</i><span>Listar todos os
                                     alunos</span></a>
                         </li>
-                        <li><a class="collapsible-body" href="#" data-i18n=""><i
-                                    class="material-icons">radio_button_unchecked</i><span>Pagamentos</span></a>
+                        <li><a class="collapsible-body" href="{{ route('payment') }}" data-i18n=""><i
+                                    class="material-icons">radio_button_unchecked</i><span>Pagamentos
+                                </span></a>
+                        </li>
+                        <li><a class="collapsible-body" href="{{ route('paymentRegister') }}" data-i18n=""><i
+                                    class="material-icons">radio_button_unchecked</i><span>Relatório
+                                    pagamentos</span></a>
                         </li>
                     </ul>
                 </div>
@@ -104,8 +109,8 @@
     <!-- BEGIN: Page Main-->
     <div id="main">
         <div class="row">
-            <div class="col s12 m12 16">
-                <div class="card">
+            <div class="col s12">
+                <div style="min-height:500px" class="card">
                     <div class="card-content">
                         @yield('content')
                     </div>

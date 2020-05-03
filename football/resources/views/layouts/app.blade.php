@@ -48,7 +48,7 @@
     <!-- END: Header-->
 
     <!-- BEGIN: Page Main-->
-    <divc class="center-align">
+    <div class="center-align">
         <div class="row">
             <div class="col s12">
                 <div class="container">
@@ -58,7 +58,7 @@
                 </div>
             </div>
         </div>
-    </divc>
+    </div>
 
     <script src="../../../app-assets/js/vendors.min.js" type="text/javascript"></script>
     <script src="../../../app-assets/js/plugins.js" type="text/javascript"></script>

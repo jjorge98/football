@@ -25,47 +25,48 @@ class StudentController extends Controller
         $data = array();
 
         if (DB::table('estado')->where('sigla', strtoupper($dados['parentUF']))->doesntExist()) {
-            $data['resultado'] = 'ERROR';
+            $data['result'] = 'ERROR';
             $data['title'] = 'Estado inválido!';
             $data['text'] = 'Por favor, verifique o campo \'estado\'!';
         } else {
             $CPF = preg_replace('/\D/', '', $dados['studentCPF']);
 
             if (DB::table('aluno')->where('cpfAluno', $CPF)->exists()) {
-                $data['resultado'] = 'ERROR';
+                $data['result'] = 'ERROR';
                 $data['title'] = 'CPF do aluno já cadastrado!';
                 $data['text'] = 'O CPF deste aluno já está cadastrado no sistema. Caso queira, entre em contato com a equipe para verificar o processo!';
             } else {
-                $cidade = strtoupper(str_replace($a, $b, $dados['parentCity']));
 
                 try {
-                    if (DB::table('cidade')->where('nomeCidade', $cidade)->exists()) {
-                        $idCidade = DB::table('cidade')->select('idCidade')->where('nomeCidade', $cidade)->first()->idCidade;
-                    } else {
-                        $idCidade = DB::table('cidade')->insertGetId(
-                            [
-                                'nomeCidade' => $cidade,
-                                'idEstado' => DB::table('estado')->select('idEstado')->where('sigla', strtoupper($dados['parentUF']))->first()->idEstado
-                            ]
-                        );
-                    }
-
-                    $idEndereco = DB::table('endereco')->insertGetId(
-                        [
-                            'cep' => str_replace('/\D/', '', $dados['parentCEP']),
-                            'bairro' => strtoupper(str_replace($a, $b, $dados['parentNeighbor'])),
-                            'logradouro' => strtoupper(str_replace($a, $b, $dados['parentAddress'])),
-                            'numero' => $dados['parentNumber'],
-                            'complemento' => strtoupper(str_replace($a, $b, $dados['parentComplement'])),
-                            'idCidade' => $idCidade
-                        ]
-                    );
-
                     $CPFRESP = preg_replace('/\D/', '', $dados['studentCPF']);
 
                     if (DB::table('responsavel')->where('cpfResp', $CPFRESP)->exists()) {
                         $idResponsavel = DB::table('responsavel')->select('idResponsavel')->where('cpfResp', $CPFRESP)->first()->idResponsavel;
                     } else {
+                        $cidade = strtoupper(str_replace($a, $b, $dados['parentCity']));
+                        
+                        if (DB::table('cidade')->where('nomeCidade', $cidade)->exists()) {
+                            $idCidade = DB::table('cidade')->select('idCidade')->where('nomeCidade', $cidade)->first()->idCidade;
+                        } else {
+                            $idCidade = DB::table('cidade')->insertGetId(
+                                [
+                                    'nomeCidade' => $cidade,
+                                    'idEstado' => DB::table('estado')->select('idEstado')->where('sigla', strtoupper($dados['parentUF']))->first()->idEstado
+                                ]
+                            );
+                        }
+
+                        $idEndereco = DB::table('endereco')->insertGetId(
+                            [
+                                'cep' => str_replace('/\D/', '', $dados['parentCEP']),
+                                'bairro' => strtoupper(str_replace($a, $b, $dados['parentNeighbor'])),
+                                'logradouro' => strtoupper(str_replace($a, $b, $dados['parentAddress'])),
+                                'numero' => $dados['parentNumber'],
+                                'complemento' => strtoupper(str_replace($a, $b, $dados['parentComplement'])),
+                                'idCidade' => $idCidade
+                            ]
+                        );
+
                         $idResponsavel = DB::table('responsavel')->insertGetId(
                             [
                                 'nomeResp' => strtoupper(str_replace($a, $b, $dados['parentName'])),
@@ -95,9 +96,9 @@ class StudentController extends Controller
                         ]
                     );
 
-                    $data['resultado'] = 'OK';
+                    $data['result'] = 'OK';
                 } catch (\Exception $e) {
-                    $data['resultado'] = 'ERROR';
+                    $data['result'] = 'ERROR';
                     $data['title'] = 'Erro no cadastro. Por favor, entre em contato com o administrador do sistema';
                     $data['error'] = $e;
                 }

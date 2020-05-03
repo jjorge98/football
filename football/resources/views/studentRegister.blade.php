@@ -1,9 +1,10 @@
 @extends("layouts.app")
 
 @section("content")
-<h5>Aluno</h5>
+<h5>Cadastro Aluno</h5>
 <div style="height: 3px; background-color:#2c3a59; margin-bottom:20px;" class="divider"></div>
 
+<h5>Aluno</h5>
 <form id="registerStudent">
     @csrf
     <div class="input-field col s8">
@@ -74,7 +75,6 @@
 
     <div class="col s12">
         <h5>Responsável</h5>
-        <div style="height: 3px; background-color:#2c3a59; margin-bottom:20px;" class="divider"></div>
     </div>
 
     <div class="input-field col s8">
